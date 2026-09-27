@@ -16,6 +16,7 @@
             --orange: #ff9100;
             --red: #ff4a4a;
         }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
@@ -26,54 +27,130 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
+            user-select: none;
         }
-        .header { display: flex; justify-content: space-between; align-items: center; }
-        .header h1 { font-size: 18px; margin: 0; }
-        
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
         .btn-action {
             background: linear-gradient(90deg, #0072ff, #00c6ff);
-            color: white; border: none; border-radius: 12px;
-            padding: 14px; font-size: 16px; font-weight: bold;
-            cursor: pointer; width: 100%; text-align: center;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
             box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);
+            transition: transform 0.1s ease;
         }
+
+        .btn-action:active {
+            transform: scale(0.98);
+        }
+
         .btn-deposit {
             background: linear-gradient(90deg, #00e676, #00b0ff);
             box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3);
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .card { background-color: var(--card-bg); border-radius: 16px; padding: 16px; border: 1px solid #1a2635; }
-        .card-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
-        .card-val { font-size: 24px; font-weight: bold; }
-        .card-val span { font-size: 14px; color: var(--accent-blue); }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid #1a2635;
+        }
+
+        .card-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .card-val {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .card-val span {
+            font-size: 13px;
+            color: var(--accent-blue);
+        }
 
         .timer-card {
-            background: rgba(255, 145, 0, 0.1);
-            border: 1px solid var(--orange);
-            border-radius: 12px; padding: 12px;
-            text-align: center; font-weight: bold;
-            color: var(--orange); display: none;
+            background: rgba(255, 145, 0, 0.07);
+            border: 1px solid rgba(255, 145, 0, 0.3);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--orange);
+            font-size: 14px;
+            letter-spacing: 0.5px;
         }
 
-        .hidden { display: none !important; }
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background-color: var(--card-bg); display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #1a2635; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: var(--text-muted); }
-        .nav-item.active { color: var(--accent-blue); }
+        .hidden {
+            display: none !important;
+        }
+
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px;
+            border-top: 1px solid #1a2635;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--accent-blue);
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>🏛️ USDT HUNT BANK</h1>
-        <div style="color: var(--accent-blue); font-size: 20px;">ℹ️</div>
+        <div style="color: var(--accent-blue); font-size: 20px; cursor: pointer;">ℹ️</div>
     </div>
 
-    <!-- Кнопка Создать Банк активна сразу -->
+    <!-- Стартовая кнопка создания банка -->
     <button id="btn-create-bank" class="btn-action">➕ Создать банк</button>
 
-    <!-- Окно созданного банка -->
+    <!-- Главная панель банка -->
     <div id="bank-dashboard" class="hidden" style="display: flex; flex-direction: column; gap: 16px;">
         <div class="stats-grid">
             <div class="card">
@@ -81,22 +158,23 @@
                 <div id="user-balance" class="card-val">0.00 <span>USDT</span></div>
             </div>
             <div class="card">
-                <div class="card-title">Статус аккаунта</div>
-                <div id="bank-status" style="color: var(--green); font-weight: bold; font-size: 18px; margin-top: 5px;">АКТИВЕН</div>
+                <div class="card-title">Статус</div>
+                <div id="bank-status" style="color: var(--green); font-weight: bold; font-size: 18px; margin-top: 2px;">АКТИВЕН</div>
             </div>
         </div>
 
-        <!-- Таймер сгорания на 24 часа -->
-        <div id="burn-timer" class="timer-card">
-            ⏳ ДО СГОРАНИЯ БАНКА: <span id="timer-time">24:00:00</span>
+        <!-- Постоянный умный таймер -->
+        <div id="burn-timer" class="timer-card" style="display: none;">
+            ⏳ ДО СГОРАНИЯ: <span id="timer-time">24:00:00</span>
         </div>
 
         <button id="btn-deposit" class="btn-action btn-deposit">💰 Пополнить баланс</button>
     </div>
 
+    <!-- Нижнее меню навигации -->
     <div class="nav-bar">
         <div class="nav-item active">🏠<span>Главная</span></div>
-        <div class="nav-item">🏆<span>Топ</span></div>
+        <div class="nav-item">🏆<span>Топ игроков</span></div>
     </div>
 
     <script>
@@ -113,22 +191,63 @@
 
         let timerInterval = null;
 
-        // Создание банка
-        btnCreate.addEventListener('click', () => {
+        // Проверяем при входе, создавал ли пользователь банк ранее
+        if (localStorage.getItem('bank_created') === 'true') {
             btnCreate.classList.add('hidden');
             bankDashboard.classList.remove('hidden');
+            
+            // Восстанавливаем баланс и таймер из памяти устройства
+            const savedBalance = localStorage.getItem('bank_balance') || '0.00';
+            userBalance.innerHTML = `${savedBalance} <span>USDT</span>`;
+            
+            const expireTime = localStorage.getItem('timer_expire_time');
+            if (expireTime) {
+                const secondsLeft = Math.floor((parseInt(expireTime) - Date.now()) / 1000);
+                if (secondsLeft > 0) {
+                    startBurnTimer(secondsLeft);
+                } else {
+                    setBankBurned();
+                }
+            }
+        }
+
+        // Действие: Создание банка
+        btnCreate.addEventListener('click', () => {
+            localStorage.setItem('bank_created', 'true');
+            localStorage.setItem('bank_balance', '0.00');
+            
+            btnCreate.classList.add('hidden');
+            bankDashboard.classList.remove('hidden');
+            
+            // Передаем сигнал твоему Python-боту
             tg.sendData(JSON.stringify({action: "create_bank"}));
         });
 
-        // Запрос на пополнение счета
+        // Действие: Запрос на пополнение баланса
         btnDeposit.addEventListener('click', () => {
             tg.sendData(JSON.stringify({action: "request_deposit"}));
             
-            // Тестовая демонстрация: сразу обновляем визуальный баланс и включаем таймер
-            userBalance.innerHTML = "10.00 <span>USDT</span>";
-            startBurnTimer(24 * 60 * 60);
+            // Имитируем моментальное зачисление 10 USDT для теста графики
+            const currentBal = parseFloat(localStorage.getItem('bank_balance') || '0.00') + 10.00;
+            localStorage.setItem('bank_balance', currentBal.toFixed(2));
+            userBalance.innerHTML = `${currentBal.toFixed(2)} <span>USDT</span>`;
+            
+            // Рассчитываем точное время сгорания (текущее время + 24 часа)
+            const twentyFourHours = 24 * 60 * 60;
+            const expireTimestamp = Date.now() + (twentyFourHours * 1000);
+            localStorage.setItem('timer_expire_time', expireTimestamp.toString());
+            
+            // Перезапускаем статус в активный и включаем таймер
+            bankStatus.innerText = "АКТИВЕН";
+            bankStatus.style.color = "var(--green)";
+            timerCard.style.background = "rgba(255, 145, 0, 0.07)";
+            timerCard.style.borderColor = "rgba(255, 145, 0, 0.3)";
+            timerCard.style.color = "var(--orange)";
+            
+            startBurnTimer(twentyFourHours);
         });
 
+        // Логика работы живого таймера
         function startBurnTimer(durationInSeconds) {
             timerCard.style.display = "block";
             let timeRemaining = durationInSeconds;
@@ -138,13 +257,7 @@
             timerInterval = setInterval(() => {
                 if (timeRemaining <= 0) {
                     clearInterval(timerInterval);
-                    userBalance.innerHTML = "0.00 <span>USDT</span>";
-                    bankStatus.innerText = "СГОРЕЛ";
-                    bankStatus.style.color = "var(--red)";
-                    timerCard.innerHTML = "❌ БАНК ОБНУЛЕН";
-                    timerCard.style.background = "rgba(255, 74, 74, 0.1)";
-                    timerCard.style.borderColor = "var(--red)";
-                    timerCard.style.color = "var(--red)";
+                    setBankBurned();
                     return;
                 }
 
@@ -160,6 +273,22 @@
 
                 timerTime.innerText = `${hours}:${minutes}:${seconds}`;
             }, 1000);
+        }
+
+        // Функция срабатывания при обнулении банка
+        function setBankBurned() {
+            localStorage.setItem('bank_balance', '0.00');
+            localStorage.removeItem('timer_expire_time');
+            
+            userBalance.innerHTML = "0.00 <span>USDT</span>";
+            bankStatus.innerText = "СГОРЕЛ";
+            bankStatus.style.color = "var(--red)";
+            
+            timerCard.style.display = "block";
+            timerCard.innerHTML = "❌ ВРЕМЯ ИСТЕКЛО — БАНК ОБНУЛЕН";
+            timerCard.style.background = "rgba(255, 74, 74, 0.08)";
+            timerCard.style.borderColor = "rgba(255, 74, 74, 0.3)";
+            timerCard.style.color = "var(--red)";
         }
     </script>
 </body>

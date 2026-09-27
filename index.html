@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USDT HUNT BANK</title>
+    <title>USDT HUNT</title>
     <script src="https://telegram.org"></script>
     <style>
         :root {
-            --bg-color: #0b1118;
-            --card-bg: #101924;
-            --accent-blue: #0088cc;
+            --bg-color: #03090f;
+            --card-bg: #09131f;
+            --accent-blue: #00a2ff;
+            --accent-green: #00e676;
+            --accent-orange: #ff9100;
             --text-main: #ffffff;
-            --text-muted: #6e7f91;
-            --green: #00e676;
-            --orange: #ff9100;
-            --red: #ff4a4a;
+            --text-muted: #5f758d;
         }
 
         body {
@@ -23,273 +22,299 @@
             color: var(--text-main);
             margin: 0;
             padding: 16px;
-            padding-bottom: 80px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+            padding-bottom: 90px;
             user-select: none;
+            overflow-x: hidden;
         }
 
-        .header {
+        .hidden { display: none !important; }
+
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
         }
-
-        .header h1 {
+        .top-bar h1 {
             font-size: 18px;
             margin: 0;
-            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .info-icon {
+            color: var(--accent-blue);
+            font-size: 20px;
+            cursor: pointer;
+            background: rgba(0, 162, 255, 0.1);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
 
-        .btn-action {
-            background: linear-gradient(90deg, #0072ff, #00c6ff);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);
+        .btn-main {
+            background: linear-gradient(90deg, #0052d4, #4364f7, #6fb1fc);
+            color: white; border: none; border-radius: 14px;
+            padding: 16px; font-size: 16px; font-weight: bold;
+            cursor: pointer; width: 100%; text-align: center;
+            box-shadow: 0 4px 20px rgba(67, 100, 247, 0.4);
             transition: transform 0.1s ease;
         }
+        .btn-main:active { transform: scale(0.98); }
+        .btn-deposit { background: linear-gradient(90deg, #00c6ff, #0072ff); box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3); }
+        .btn-green { background: linear-gradient(90deg, #00e676, #00b0ff); box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); }
 
-        .btn-action:active {
-            transform: scale(0.98);
-        }
-
-        .btn-deposit {
-            background: linear-gradient(90deg, #00e676, #00b0ff);
-            box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3);
-            margin-top: 5px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
         .card {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 16px;
-            border: 1px solid #1a2635;
+            background: linear-gradient(145deg, #09131f, #0c1929);
+            border-radius: 16px; padding: 16px; border: 1px solid #14253d;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        .card-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .card-val { font-size: 22px; font-weight: bold; }
+        .card-val span { font-size: 13px; color: var(--accent-blue); }
+        
+        .btn-sub {
+            background: rgba(20, 37, 61, 0.6); color: white; border: 1px solid #1c3557;
+            border-radius: 10px; padding: 10px; font-size: 13px; width: 100%; cursor: pointer; margin-top: 12px;
         }
 
-        .card-title {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
+        .status-bar {
+            display: flex; justify-content: center; gap: 24px; background: #07111c;
+            padding: 12px; border-radius: 14px; font-weight: bold; font-size: 15px; border: 1px solid #102136; margin: 16px 0;
         }
 
-        .card-val {
-            font-size: 22px;
-            font-weight: bold;
-        }
+        .section-header { font-size: 13px; text-transform: uppercase; color: var(--text-main); letter-spacing: 0.5px; margin-bottom: 4px; display: flex; justify-content: space-between; }
+        .status-tag { color: var(--accent-green); background: rgba(0, 230, 118, 0.08); padding: 2px 8px; border-radius: 20px; font-size: 11px; }
+        .section-desc { font-size: 12px; color: var(--text-muted); margin: 0 0 12px 0; }
+        
+        .activity-box { background: #060d17; border-radius: 16px; padding: 12px; min-height: 100px; display: flex; flex-direction: column; gap: 8px; border: 1px solid #0f1f33; }
+        .activity-item { font-size: 13px; padding: 10px; background: #09131f; border-radius: 10px; display: flex; justify-content: space-between; border-left: 3px solid var(--accent-blue); }
 
-        .card-val span {
-            font-size: 13px;
-            color: var(--accent-blue);
-        }
+        .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #03090f; z-index: 999; padding: 16px; overflow-y: auto; padding-bottom: 40px; }
+        .rules-title-block { text-align: center; margin-bottom: 25px; }
+        .rules-title-block h2 { font-size: 24px; color: #ffffff; margin: 0; text-transform: uppercase; }
+        .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .rule-card { background: #09131f; border-radius: 14px; padding: 14px; border: 1px solid #13253c; display: flex; flex-direction: column; gap: 6px; }
+        .rule-num { background: rgba(0, 162, 255, 0.1); color: var(--accent-blue); width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 12px; }
+        .rule-text { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+        .rule-text b { color: #fff; }
 
-        .timer-card {
-            background: rgba(255, 145, 0, 0.07);
-            border: 1px solid rgba(255, 145, 0, 0.3);
-            border-radius: 14px;
-            padding: 14px;
-            text-align: center;
-            font-weight: bold;
-            color: var(--orange);
-            font-size: 14px;
-            letter-spacing: 0.5px;
-        }
+        .table-box { background: #09131f; border-radius: 16px; padding: 12px; border: 1px solid #13253c; margin-top: 16px; }
+        .crypto-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
+        .crypto-table th { color: var(--text-muted); padding: 8px; font-weight: normal; text-transform: uppercase; font-size: 10px; }
+        .crypto-table td { padding: 10px 8px; border-bottom: 1px solid #13253c; }
+        .crypto-table tr:last-child td { border-bottom: none; }
 
-        .hidden {
-            display: none !important;
-        }
+        .timer-strip { background: rgba(255, 145, 0, 0.08); border: 1px solid rgba(255, 145, 0, 0.25); border-radius: 14px; padding: 14px; text-align: center; font-weight: bold; color: var(--accent-orange); font-size: 15px; margin-top: 16px; }
 
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: var(--card-bg);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px;
-            border-top: 1px solid #1a2635;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 11px;
-            color: var(--text-muted);
-            gap: 4px;
-        }
-
-        .nav-item.active {
-            color: var(--accent-blue);
-        }
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background-color: #09131f; display: flex; justify-content: space-around; padding: 14px; border-top: 1px solid #13253c; z-index: 900; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: var(--text-muted); gap: 6px; cursor: pointer; }
+        .nav-item.active { color: var(--accent-blue); }
+        .nav-icon { font-size: 18px; }
     </style>
 </head>
 <body>
+    <!-- ================= В К Л А Д К А  1:  Г Л А В Н А Я ================= -->
+    <div id="tab-home" class="tab-content">
+        <div class="top-bar">
+            <h1>🏛️ ВАШ БАНК</h1>
+            <div class="info-icon" onclick="openRules()">ℹ️</div>
+        </div>
 
-    <div class="header">
-        <h1>🏛️ USDT HUNT BANK</h1>
-        <div style="color: var(--accent-blue); font-size: 20px; cursor: pointer;">ℹ️</div>
+        <button id="btn-create-bank" class="btn-main">➕ Создать банк</button>
+
+        <div id="home-dashboard" class="hidden">
+            <div class="stats-grid">
+                <div class="card">
+                    <div class="card-title">Ваши роялти</div>
+                    <div class="card-val">0 <span>TON</span></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Реферальный доход</div>
+                    <div class="card-val">0 <span>TON</span></div>
+                    <button class="btn-sub">👤+ Пригласить</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <span style="color: var(--accent-green);">🟢 <span id="online-count">105</span></span>
+            <span style="color: var(--accent-orange);">🔥 <span id="burned-count">163</span></span>
+        </div>
+
+        <div class="section-header">
+            <span>Лента активности</span>
+            <span class="status-tag">● ОНЛАЙН</span>
+        </div>
+        <p class="section-desc">Действия в реальном времени, влияющие на ваш банк</p>
+        
+        <div class="activity-box" id="activity-log"></div>
     </div>
 
-    <!-- Стартовая кнопка создания банка -->
-    <button id="btn-create-bank" class="btn-action">➕ Создать банк</button>
 
-    <!-- Главная панель банка -->
-    <div id="bank-dashboard" class="hidden" style="display: flex; flex-direction: column; gap: 16px;">
+    <!-- ================= В К Л А Д К А  2:  Б А Н К ================= -->
+    <div id="tab-bank" class="tab-content hidden">
+        <div class="top-bar">
+            <h1>💳 УПРАВЛЕНИЕ БАНКОМ</h1>
+        </div>
+
+        <div class="card" style="text-align: center; padding: 24px 16px; margin-bottom: 16px;">
+            <div class="card-title" style="font-size: 12px;">Общий баланс</div>
+            <div id="bank-balance" class="card-val" style="font-size: 32px; margin: 8px 0;">0.00 <span style="font-size: 18px;">USDT</span></div>
+            <div style="color: var(--text-muted); font-size: 13px;">≈ 0.00 USD</div>
+        </div>
+
+        <button id="btn-deposit-trigger" class="btn-main btn-green">➕ Пополнить банк</button>
+
+        <div id="active-bank-timer" class="timer-strip hidden">
+            ⏳ До следующего пополнения: <span id="timer-display">24:00:00</span>
+        </div>
+
         <div class="stats-grid">
-            <div class="card">
-                <div class="card-title">Ваш баланс</div>
-                <div id="user-balance" class="card-val">0.00 <span>USDT</span></div>
-            </div>
-            <div class="card">
-                <div class="card-title">Статус</div>
-                <div id="bank-status" style="color: var(--green); font-weight: bold; font-size: 18px; margin-top: 2px;">АКТИВЕН</div>
-            </div>
+            <div class="card" style="padding: 12px;"><div class="card-title">Проценты</div><div style="color:var(--accent-green); font-weight:bold;">0% <span style="color:var(--text-muted); font-size:10px;">в день</span></div></div>
+            <div class="card" style="padding: 12px;"><div class="card-title">Всего получено</div><div>0.00 <span>USDT</span></div></div>
         </div>
-
-        <!-- Постоянный умный таймер -->
-        <div id="burn-timer" class="timer-card" style="display: none;">
-            ⏳ ДО СГОРАНИЯ: <span id="timer-time">24:00:00</span>
-        </div>
-
-        <button id="btn-deposit" class="btn-action btn-deposit">💰 Пополнить баланс</button>
     </div>
 
-    <!-- Нижнее меню навигации -->
+
+    <!-- ================= В К Л А Д К А  3:  Т О П ================= -->
+    <div id="tab-top" class="tab-content hidden">
+        <div class="top-bar">
+            <h1>🏆 ТОП ИГРОКОВ</h1>
+        </div>
+        <p class="section-desc" style="margin-top:-10px;">Лидеры по объему удерживаемых вкладов в системе</p>
+        
+        <table class="crypto-table">
+            <thead>
+                <tr><th>Игрок</th><th>Вклад (USDT)</th><th>Доля</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>👑 Игрок_771</td><td>1,250.00</td><td>45%</td></tr>
+                <tr><td>🥈 User_9011</td><td>850.00</td><td>30%</td></tr>
+                <tr><td>🥉 Alex_Crypto</td><td>400.00</td><td>25%</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- ================= О К Н О   П Р А В И Л ================= -->
+    <div id="rules-modal" class="modal hidden">
+        <div class="rules-title-block">
+            <h2>📜 Правила проекта</h2>
+            <p class="section-desc" style="margin-top:4px;">Изучите механику распределения пула</p>
+        </div>
+
+        <div class="rules-grid">
+            <div class="rule-card">
+                <div class="rule-num">1</div>
+                <div class="rule-text"><b>Пополните баланс</b>. Отправьте USDT на кошелек.</div>
+            </div>
+            <div class="rule-card">
+                <div class="rule-num">2</div>
+                <div class="rule-text"><b>Поддерживайте счет</b> каждые 24 часа на <b>2–5%</b> от баланса.</div>
+            </div>
+            <div class="rule-card">
+                <div class="rule-num">3</div>
+                <div class="rule-text">Если пропустить таймер, ваш баланс <b>полностью сгорает</b>.</div>
+            </div>
+            <div class="rule-card">
+                <div class="rule-num">4</div>
+                <div class="rule-text">Сгоревшие средства <b>делятся между игроками</b>, кто активен.</div>
+            </div>
+        </div>
+
+        <div class="table-box">
+            <div class="card-title" style="margin-bottom:8px; padding-left:4px;">Пример распределения пула:</div>
+            <table class="crypto-table">
+                <thead>
+                    <tr><th>Игрок</th><th>Вклад</th><th>Доля</th><th>Получит</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Игрок 1</td><td>500$</td><td>50%</td><td style="color:var(--accent-green);">+250$</td></tr>
+                    <tr><td>Игрок 2</td><td>300$</td><td>30%</td><td style="color:var(--accent-green);">+150$</td></tr>
+                    <tr><td>Игрок 3</td><td>200$</td><td>20%</td><td style="color:var(--accent-green);">+100$</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <button class="btn-main" style="margin-top:24px;" onclick="closeRules()">Вернуться в банк</button>
+    </div>
+
+
+    <!-- НИЖНЯЯ ПАНЕЛЬ -->
     <div class="nav-bar">
-        <div class="nav-item active">🏠<span>Главная</span></div>
-        <div class="nav-item">🏆<span>Топ игроков</span></div>
+        <div class="nav-item active" onclick="switchTab('home', this)"><span class="nav-icon">🏠</span><span>Главная</span></div>
+        <div class="nav-item" onclick="switchTab('bank', this)"><span class="nav-icon">🏛️</span><span>Банк</span></div>
+        <div class="nav-item" onclick="switchTab('top', this)"><span class="nav-icon">🏆</span><span>Топ</span></div>
     </div>
-
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        const btnCreate = document.getElementById('btn-create-bank');
-        const bankDashboard = document.getElementById('bank-dashboard');
-        const btnDeposit = document.getElementById('btn-deposit');
-        const timerCard = document.getElementById('burn-timer');
-        const timerTime = document.getElementById('timer-time');
-        const userBalance = document.getElementById('user-balance');
-        const bankStatus = document.getElementById('bank-status');
+        const names = ["Ruslan", "Alex", "Dmitry", "Nikita", "Artem", "Maxim", "Ivan"];
+        const logBox = document.getElementById('activity-log');
 
-        let timerInterval = null;
-
-        // Проверяем при входе, создавал ли пользователь банк ранее
-        if (localStorage.getItem('bank_created') === 'true') {
-            btnCreate.classList.add('hidden');
-            bankDashboard.classList.remove('hidden');
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             
-            // Восстанавливаем баланс и таймер из памяти устройства
-            const savedBalance = localStorage.getItem('bank_balance') || '0.00';
-            userBalance.innerHTML = `${savedBalance} <span>USDT</span>`;
-            
-            const expireTime = localStorage.getItem('timer_expire_time');
-            if (expireTime) {
-                const secondsLeft = Math.floor((parseInt(expireTime) - Date.now()) / 1000);
-                if (secondsLeft > 0) {
-                    startBurnTimer(secondsLeft);
-                } else {
-                    setBankBurned();
-                }
-            }
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            el.classList.add('active');
         }
 
-        // Действие: Создание банка
-        btnCreate.addEventListener('click', () => {
-            localStorage.setItem('bank_created', 'true');
-            localStorage.setItem('bank_balance', '0.00');
-            
+        function openRules() { document.getElementById('rules-modal').classList.remove('hidden'); }
+        function closeRules() { document.getElementById('rules-modal').classList.add('hidden'); }
+
+        const btnCreate = document.getElementById('btn-create-bank');
+        const homeDashboard = document.getElementById('home-dashboard');
+        const btnDeposit = document.getElementById('btn-deposit-trigger');
+        const timerStrip = document.getElementById('active-bank-timer');
+        const timerDisplay = document.getElementById('timer-display');
+        const balanceDisplay = document.getElementById('bank-balance');
+
+        if(localStorage.getItem('bank_active') === 'true') {
             btnCreate.classList.add('hidden');
-            bankDashboard.classList.remove('hidden');
-            
-            // Передаем сигнал твоему Python-боту
+            homeDashboard.classList.remove('hidden');
+        }
+
+        btnCreate.addEventListener('click', () => {
+            localStorage.setItem('bank_active', 'true');
+            btnCreate.classList.add('hidden');
+            homeDashboard.classList.remove('hidden');
             tg.sendData(JSON.stringify({action: "create_bank"}));
         });
 
-        // Действие: Запрос на пополнение баланса
         btnDeposit.addEventListener('click', () => {
             tg.sendData(JSON.stringify({action: "request_deposit"}));
-            
-            // Имитируем моментальное зачисление 10 USDT для теста графики
-            const currentBal = parseFloat(localStorage.getItem('bank_balance') || '0.00') + 10.00;
-            localStorage.setItem('bank_balance', currentBal.toFixed(2));
-            userBalance.innerHTML = `${currentBal.toFixed(2)} <span>USDT</span>`;
-            
-            // Рассчитываем точное время сгорания (текущее время + 24 часа)
-            const twentyFourHours = 24 * 60 * 60;
-            const expireTimestamp = Date.now() + (twentyFourHours * 1000);
-            localStorage.setItem('timer_expire_time', expireTimestamp.toString());
-            
-            // Перезапускаем статус в активный и включаем таймер
-            bankStatus.innerText = "АКТИВЕН";
-            bankStatus.style.color = "var(--green)";
-            timerCard.style.background = "rgba(255, 145, 0, 0.07)";
-            timerCard.style.borderColor = "rgba(255, 145, 0, 0.3)";
-            timerCard.style.color = "var(--orange)";
-            
-            startBurnTimer(twentyFourHours);
+            balanceDisplay.innerHTML = "1250.00 <span style='font-size:18px;'>USDT</span>";
+            timerStrip.classList.remove('hidden');
+            startCountdown(24 * 60 * 60);
         });
 
-        // Логика работы живого таймера
-        function startBurnTimer(durationInSeconds) {
-            timerCard.style.display = "block";
-            let timeRemaining = durationInSeconds;
-
-            if (timerInterval) clearInterval(timerInterval);
-
-            timerInterval = setInterval(() => {
-                if (timeRemaining <= 0) {
-                    clearInterval(timerInterval);
-                    setBankBurned();
-                    return;
-                }
-
-                timeRemaining--;
-                
-                let hours = Math.floor(timeRemaining / 3600);
-                let minutes = Math.floor((timeRemaining % 3600) / 60);
-                let seconds = timeRemaining % 60;
-
-                hours = hours < 10 ? "0" + hours : hours;
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                timerTime.innerText = `${hours}:${minutes}:${seconds}`;
+        function startCountdown(sec) {
+            let left = sec;
+            const interval = setInterval(() => {
+                if(left <= 0) { clearInterval(interval); return; }
+                left--;
+                let h = Math.floor(left / 3600), m = Math.floor((left % 3600) / 60), s = left % 60;
+                timerDisplay.innerText = `${h<10?'0'+h:h}:${m<10?'0'+m:m}:${s<10?'0'+s:s}`;
             }, 1000);
         }
 
-        // Функция срабатывания при обнулении банка
-        function setBankBurned() {
-            localStorage.setItem('bank_balance', '0.00');
-            localStorage.removeItem('timer_expire_time');
-            
-            userBalance.innerHTML = "0.00 <span>USDT</span>";
-            bankStatus.innerText = "СГОРЕЛ";
-            bankStatus.style.color = "var(--red)";
-            
-            timerCard.style.display = "block";
-            timerCard.innerHTML = "❌ ВРЕМЯ ИСТЕКЛО — БАНК ОБНУЛЕН";
-            timerCard.style.background = "rgba(255, 74, 74, 0.08)";
-            timerCard.style.borderColor = "rgba(255, 74, 74, 0.3)";
-            timerCard.style.color = "var(--red)";
+        function addLog() {
+            const name = names[Math.floor(Math.random() * names.length)] + "_" + Math.floor(1000 + Math.random() * 9000);
+            const item = document.createElement('div');
+            item.className = 'activity-item';
+            item.innerHTML = `<span>Юзер <b>${name}</b> открыл кабинет</span><span style="color:var(--text-muted); font-size:11px;">только что</span>`;
+            logBox.insertBefore(item, logBox.firstChild);
+            if(logBox.children.length > 3) logBox.removeChild(logBox.lastChild);
         }
+        setInterval(addLog, 4000); addLog();
     </script>
 </body>
 </html>
